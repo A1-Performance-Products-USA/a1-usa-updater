@@ -18,11 +18,11 @@ class ShopifyHandler {
     listener;
     loader;
     products;
-    constructor(shop, token, handlerURL, saveLocation, cacheFileName) {
+    constructor(shop, token, handlerURL, port, saveLocation, cacheFileName) {
         this.shop = shop;
         this.token = token;
         this.requester = new shopify_api_1.Shopify.Clients.Graphql(`${shop}.myshopify.com`, token);
-        this.listener = new ShopifyWebHookHandler_1.default(this.requester, 8080, handlerURL);
+        this.listener = new ShopifyWebHookHandler_1.default(this.requester, parseInt(port), handlerURL);
         this.fetcher = new ShopifyFetcher_1.default(this.requester, this.listener, saveLocation, cacheFileName);
         this.loader = new ShopifyLoader_1.default(saveLocation, this.fetcher.saveFileName);
         this.mutator = new ShopifyMutator_1.default(this.requester, this.listener, saveLocation, '');

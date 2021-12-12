@@ -32,7 +32,7 @@ perfObserver.observe({ entryTypes: ["measure"] });
         user: process.env.MOTORSTATE_USER,
         pass: process.env.MOTORSTATE_PASS
     }, process.env.MOTORSTATE_INVENTORY_FILE, DOWNLOAD_DIR, d.getHours() + "_ms_inventory.csv", ["gdx613", "luc11176", "luc11176-50", "vpf2073", "vpf2075", "vpf2080"]);
-    const shopify = new ShopifyHandler_1.default(process.env.SHOPIFY_SHOP, process.env.SHOPIFY_API, process.env.SHOPIFY_WEBHOOK_URL, DOWNLOAD_DIR, d.getHours() + "_sh_inventory.jsonl");
+    const shopify = new ShopifyHandler_1.default(process.env.SHOPIFY_SHOP, process.env.SHOPIFY_API, process.env.SHOPIFY_WEBHOOK_URL, process.env.SERVER_PORT, DOWNLOAD_DIR, d.getHours() + "_sh_inventory.jsonl");
     try {
         perf_hooks_1.performance.mark("MS_LOAD_TIME_START");
         console.log("Loading MotorState Products...");
