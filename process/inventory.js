@@ -12,7 +12,7 @@ const perf_hooks_1 = require("perf_hooks");
 var fs = require('fs');
 var util = require("util");
 const d = new Date();
-var log_file = fs.createWriteStream(`./build/logs/${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}_${d.getHours()}_inventory.log`, { flags: "w" });
+var log_file = fs.createWriteStream(`./logs/${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}_${d.getHours()}_inventory.log`, { flags: "w" });
 console.log = function (d) {
     //
     log_file.write(util.format(d) + "\n");
@@ -26,7 +26,7 @@ const perfObserver = new perf_hooks_1.PerformanceObserver((items) => {
 perfObserver.observe({ entryTypes: ["measure"] });
 (async () => {
     perf_hooks_1.performance.mark("APP_LOAD_TIME_START");
-    const DOWNLOAD_DIR = "./build/cache";
+    const DOWNLOAD_DIR = "./cache";
     const motorstate = new MotorState_1.default({
         host: process.env.MOTORSTATE_HOST,
         user: process.env.MOTORSTATE_USER,
