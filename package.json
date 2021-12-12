@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc && tsc-alias"
+    "build": "mkdir logs && mkdir cache",
+    "import": "node ./process/import",
+    "clean": "node ./process/clean",
+    "inventory": "node ./process/inventory"
   },
   "author": "",
   "license": "ISC",
