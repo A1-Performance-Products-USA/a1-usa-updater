@@ -3,8 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-console.log(__dirname);
-require('dotenv').config({ path: __dirname + '/.env' });
+require('dotenv').config({ path: '../.env' });
 const ChangeList_1 = __importDefault(require("../classes/Comparison/ChangeList"));
 const Comparison_1 = __importDefault(require("../classes/Comparison/Comparison"));
 const MotorState_1 = __importDefault(require("../classes/MotorState/MotorState"));
