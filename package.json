@@ -6,7 +6,7 @@
   "scripts": {
     "build": "mkdir logs && mkdir cache",
     "import": "node ./process/import",
-    "clean": "node ./process/clean",
+    "clean": "node ./process/cleaner",
     "inventory": "node ./process/inventory"
   },
   "author": "",
