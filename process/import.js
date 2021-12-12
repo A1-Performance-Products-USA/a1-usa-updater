@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+require('dotenv').config({ path: __dirname + '/.env' });
 const ChangeList_1 = __importDefault(require("../classes/Comparison/ChangeList"));
 const Comparison_1 = __importDefault(require("../classes/Comparison/Comparison"));
 const MotorState_1 = __importDefault(require("../classes/MotorState/MotorState"));
@@ -12,7 +13,6 @@ var fs = require('fs');
 var util = require("util");
 const d = new Date();
 var log_file = fs.createWriteStream(`./build/logs/${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}_import.log`, { flags: "w" });
-require('dotenv').config();
 console.log = function (d) {
     //
     log_file.write(util.format(d) + "\n");
