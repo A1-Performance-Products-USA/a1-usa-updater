@@ -9,12 +9,6 @@ const MotorState_1 = __importDefault(require("../classes/MotorState/MotorState")
 const ShopifyHandler_1 = __importDefault(require("../classes/Shopify/ShopifyHandler"));
 const perf_hooks_1 = require("perf_hooks");
 var fs = require('fs');
-var dir = ['../cache', '../logs'];
-dir.forEach((v) => {
-    if (!fs.existsSync(v)) {
-        fs.mkdirSync(v);
-    }
-});
 var util = require("util");
 const d = new Date();
 var log_file = fs.createWriteStream(`./build/logs/${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}_${d.getHours()}_inventory.log`, { flags: "w" });

@@ -5,12 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Cleaner_1 = __importDefault(require("../classes/Cleaner"));
 var fs = require('fs');
-var dir = ['../cache', '../logs'];
-dir.forEach((v) => {
-    if (!fs.existsSync(v)) {
-        fs.mkdirSync(v);
-    }
-});
 const util_1 = __importDefault(require("util"));
 const d = new Date();
 var log_file = fs.createWriteStream(`./build/logs/${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}_cleaner.log`, { flags: "w" });
