@@ -5,6 +5,9 @@ build/
 *.jsonl
 *.exe
 
+ssl/
+static/
+
 # Logs
 logs
 *.log
