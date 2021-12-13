@@ -1,6 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
+const https_1 = __importDefault(require("https"));
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 class ShopifyWebHookHandler {
     requester;
     app = express();
@@ -9,8 +15,11 @@ class ShopifyWebHookHandler {
     constructor(requester, port, handlerURL) {
         this.requester = requester;
         this.handlerURL = handlerURL;
-        this.app.listen(port, () => {
-            console.log(`Listening on: http://localhost:${port}`);
+        https_1.default.createServer({
+            key: fs_1.default.readFileSync(path_1.default.join('..', __dirname, 'ssl', 'privkey.pem')),
+            cert: fs_1.default.readFileSync(path_1.default.join('..', __dirname, 'ssl', 'fullchain.pem')),
+        }, this.app).listen(port, function () {
+            console.log("App listening on port 3000! Go to https://localhost:3000/");
         });
     }
     async createWebListener(kind, fn) {
