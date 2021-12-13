@@ -16,8 +16,8 @@ class ShopifyWebHookHandler {
         this.requester = requester;
         this.handlerURL = handlerURL;
         https_1.default.createServer({
-            key: fs_1.default.readFileSync(path_1.default.join('..', __dirname, 'ssl', 'privkey.pem')),
-            cert: fs_1.default.readFileSync(path_1.default.join('..', __dirname, 'ssl', 'fullchain.pem')),
+            key: fs_1.default.readFileSync(path_1.default.join('../../', 'ssl', 'privkey.pem')),
+            cert: fs_1.default.readFileSync(path_1.default.join('../../', 'ssl', 'fullchain.pem')),
         }, this.app).listen(port, function () {
             console.log("App listening on port 3000! Go to https://localhost:3000/");
         });
