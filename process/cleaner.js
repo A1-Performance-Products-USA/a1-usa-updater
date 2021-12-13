@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require('dotenv').config({ path: __dirname + '/.env' });
+require('dotenv').config({ path: './.env' });
 const Cleaner_1 = __importDefault(require("../classes/Cleaner"));
 var fs = require('fs');
 const util_1 = __importDefault(require("util"));
