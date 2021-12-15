@@ -51,6 +51,8 @@ class MSLoader {
                 skipLines: 1
             }))
                 .on('data', async (data) => {
+                if (data.long_description.toLowerCase().includes('sanitizer'))
+                    return;
                 fn(await this.translateToShopify(new MotorStateProduct_1.default(data)));
             })
                 .on('end', () => {

@@ -31,7 +31,7 @@ perfObserver.observe({ entryTypes: ["measure"] });
         host: process.env.MOTORSTATE_HOST,
         user: process.env.MOTORSTATE_USER,
         pass: process.env.MOTORSTATE_PASS
-    }, process.env.MOTORSTATE_DAILY_FILE, DOWNLOAD_DIR, "ms_products.csv", ["gdx613", "luc11176", "luc11176-50", "vpf2073", "vpf2075", "vpf2080"]);
+    }, process.env.MOTORSTATE_DAILY_FILE, DOWNLOAD_DIR, "ms_products.csv", ["gdx613", "gdx600", "luc11176", "luc11176-50", "vpf2073", "vpf2075", "vpf2080"]);
     const shopify = new ShopifyHandler_1.default(process.env.SHOPIFY_SHOP, process.env.SHOPIFY_API, process.env.SHOPIFY_WEBHOOK_URL, process.env.SERVER_PORT, DOWNLOAD_DIR, "sh_products.jsonl");
     try {
         perf_hooks_1.performance.mark("MS_LOAD_TIME_START");
