@@ -120,7 +120,7 @@ class MSLoader {
         else if (priceNum >= 500) {
             priceTag = "More than $500";
         }
-        return [product.category_1.replace(',', ''), product.category_2.replace(',', ''), product.category_3.replace(',', ''), product.brand.replace(',', ''), priceTag];
+        return [product.category_1.replace(/,/g, ''), product.category_2.replace(/,/g, ''), product.category_3.replace(/,/g, ''), product.brand.replace(/,/g, ''), priceTag];
     }
     async translateToShopifyInventory(product) {
         return new Promise((resolve, reject) => {
@@ -137,7 +137,7 @@ class MSLoader {
             resolve(new ShopifyProduct_1.default({
                 handle: product.handle,
                 title: `${product.part_number} - ${product.long_description || ""}`.substring(0, 255),
-                descriptionHtml: `${product.part_number} - ${product.long_description || ""}</br>${product.ms_notes.replace(/\\/g, '-') || ""}`,
+                descriptionHtml: `${product.part_number} - ${product.long_description || ""} </br> ${product.ms_notes.replace(/\\/g, '-') || ""}`,
                 vendor: product.brand || "",
                 productType: product.category_3 || "Unclassified",
                 tags: this.createTags(product),
