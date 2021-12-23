@@ -136,7 +136,7 @@ class MSLoader {
         return new Promise((resolve, reject) => {
             resolve(new ShopifyProduct_1.default({
                 handle: product.handle,
-                title: `${product.part_number} - ${product.long_description || ""}`.substring(0, 255),
+                title: `${product.long_description || ""}`.substring(0, 255),
                 descriptionHtml: `${product.part_number} - ${product.long_description || ""} </br> ${product.ms_notes.replace(/\\/g, '-') || ""}`,
                 vendor: product.brand || "",
                 productType: product.category_3 || "Unclassified",
