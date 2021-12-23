@@ -137,7 +137,7 @@ class MSLoader {
             resolve(new ShopifyProduct_1.default({
                 handle: product.handle,
                 title: `${product.long_description || ""}`.substring(0, 255),
-                descriptionHtml: `${product.part_number} - ${product.long_description || ""} </br> ${product.ms_notes.replace(/\\/g, '-') || ""}`,
+                descriptionHtml: `<p>${product.long_description || ""}</p><p>${product.ms_notes.replace(/\\/g, '-') || ""}</p>`,
                 vendor: product.brand || "",
                 productType: product.category_3 || "Unclassified",
                 tags: this.createTags(product),
