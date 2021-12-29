@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require('dotenv').config({ path: './.env' });
 const Cleaner_1 = __importDefault(require("../classes/Cleaner"));
+const path_1 = __importDefault(require("path"));
 var fs = require('fs');
 const util_1 = __importDefault(require("util"));
 const d = new Date();
@@ -15,6 +16,6 @@ console.log = function (d) {
     process.stdout.write(util_1.default.format(d) + "\n");
 };
 (() => {
-    const cleaner = new Cleaner_1.default('./cache', parseInt(process.env.CLEANER_CACHE_DAYS), './logs', parseInt(process.env.CLEANER_LOGS_DAYS));
+    const cleaner = new Cleaner_1.default(path_1.default.join(__dirname, 'cache'), parseInt(process.env.CLEANER_CACHE_DAYS), path_1.default.join(__dirname, 'logs'), parseInt(process.env.CLEANER_LOGS_DAYS));
     return cleaner.clean();
 })();
