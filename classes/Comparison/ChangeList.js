@@ -6,17 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 class ChangeList {
-    productUpdates;
-    productCreates;
-    createPath;
-    updatePath;
-    createFileName;
-    updateFileName;
-    createName;
-    updateName;
-    createCount;
-    updateCount;
-    dir;
     constructor(dir, createName, updateName) {
         this.productCreates = [];
         this.productUpdates = [];
