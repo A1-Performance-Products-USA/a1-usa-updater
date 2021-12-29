@@ -3,13 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require('dotenv').config({ path: './.env' });
-const Cleaner_1 = __importDefault(require("../classes/Cleaner"));
 const path_1 = __importDefault(require("path"));
+require('dotenv').config({ path: path_1.default.join(__dirname, '.env') });
+const Cleaner_1 = __importDefault(require("./classes/Cleaner"));
 var fs = require('fs');
 const util_1 = __importDefault(require("util"));
 const d = new Date();
-var log_file = fs.createWriteStream(`./logs/${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}_cleaner.log`, { flags: "w" });
+var log_file = fs.createWriteStream(path_1.default.join(__dirname, 'logs', `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}_cleaner.log`), { flags: "w" });
 console.log = function (d) {
     //
     log_file.write(util_1.default.format(d) + "\n");
