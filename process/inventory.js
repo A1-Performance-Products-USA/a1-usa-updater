@@ -10,7 +10,7 @@ const MotorState_1 = __importDefault(require("../classes/MotorState/MotorState")
 const ShopifyHandler_1 = __importDefault(require("../classes/Shopify/ShopifyHandler"));
 const perf_hooks_1 = require("perf_hooks");
 const path_1 = __importDefault(require("path"));
-console.log(path_1.default.join(__dirname, 'logs'));
+console.log(path_1.default.join(require.main.filename, 'logs'));
 var fs = require('fs');
 var util = require("util");
 const d = new Date();
