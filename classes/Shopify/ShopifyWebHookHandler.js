@@ -15,7 +15,8 @@ class ShopifyWebHookHandler {
     }
     async createWebListener(kind, fn, failSafe) {
         return new Promise((resolve, reject) => {
-            failSafe(resolve, reject);
+            if (failSafe)
+                failSafe(resolve, reject);
             this.app.post(`/listener/${kind}`, (req, res) => {
                 fn(req, res, resolve, reject);
                 res.status(200).end();
