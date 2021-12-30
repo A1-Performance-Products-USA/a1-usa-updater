@@ -20,6 +20,8 @@ class SHMutator extends ShopifyBulkHandler_1.default {
     currentCreate;
     currentUpdate;
     mutationId;
+    active;
+    completionTimer;
     constructor(requester, listener, saveLocation, saveFileName) {
         super(requester, listener, saveLocation, saveFileName, "mutation");
         this.uploadInfo = {
@@ -29,6 +31,7 @@ class SHMutator extends ShopifyBulkHandler_1.default {
         };
         this.createCount = 0;
         this.updateCount = 0;
+        this.active = false;
         this.finishBulk = this.finishBulk.bind(this);
     }
     setSavePaths(dir, create, update) {
@@ -167,6 +170,7 @@ class SHMutator extends ShopifyBulkHandler_1.default {
                 return Promise.reject(req.body["data"].bulkOperationRunMutation.userErrors[0]);
             }
             console.log(req.body);
+            this.active = true;
             return Promise.resolve(req.body);
         }
         catch (err) {
@@ -195,13 +199,13 @@ class SHMutator extends ShopifyBulkHandler_1.default {
             }
         });
     }
-    async downloadResults() {
+    async downloadResults(downloadURL) {
         return new Promise(async (resolve, reject) => {
             try {
                 console.log("Downloading the results of mutation ID: " + this.mutationId);
                 const date = new Date();
                 let fileWrite = fs_1.default.createWriteStream(path_1.default.join(this.saveLocation, `${(this.focus == "CREATE" ? this.createFileName : this.updateFileName) + "_" + (this.focus == "CREATE" ? this.createCount : this.updateCount) + '_results.jsonl'}`));
-                let stream = https_1.default.get(await this.getResultsURL(), {
+                let stream = https_1.default.get(downloadURL || await this.getResultsURL(), {
                     headers: {
                         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
                         'Accept-Encoding': 'gzip, deflate, br',
@@ -225,9 +229,79 @@ class SHMutator extends ShopifyBulkHandler_1.default {
             }
         });
     }
+    async getBulkStatus() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const req = await this.requester.query({
+                    data: `
+                              query {
+                                   node(id: "${this.mutationId}") {
+                                        ... on BulkOperation {
+                                             url,
+                                             status
+                                        }
+                                   }
+                              }
+                         `
+                });
+                console.log(req.body["data"]);
+                resolve(req.body["data"].node);
+            }
+            catch (err) {
+                reject(err);
+            }
+        });
+    }
+    async checkBulkStatus(resolve, reject) {
+        this.completionTimer = setTimeout(async () => {
+            try {
+                if (!this.active)
+                    return;
+                console.log('The bulk operation is taking a while... Checking for a failed webhook...');
+                const res = await this.getBulkStatus();
+                if (res["status"] == 'COMPLETED') {
+                    console.log("Bulk operation finished!");
+                    this.active = false;
+                    await this.downloadResults(res["url"]);
+                    this.listener.deleteSubscription();
+                    if (this.focus == "CREATE") {
+                        this.createCount--;
+                        if (this.createCount == 0) {
+                            return resolve(await this.process("UPDATE"));
+                        }
+                        else {
+                            return resolve(await this.process("CREATE"));
+                        }
+                    }
+                    if (this.focus == 'UPDATE') {
+                        this.updateCount--;
+                        if (this.updateCount == 0) {
+                            return resolve();
+                        }
+                        else {
+                            return resolve(await this.process("UPDATE"));
+                        }
+                    }
+                    return resolve();
+                }
+                else if (res["status"] == 'RUNNING') {
+                    console.log('The bulk operation is still running.');
+                    this.checkBulkStatus(resolve, reject);
+                }
+                else {
+                    throw new Error('Issue with running bulk mutation: ' + this.mutationId);
+                }
+            }
+            catch (err) {
+                reject(err);
+            }
+        }, 30 * 60 * 1000);
+    }
     async finishBulk(req, res, resolve, reject) {
         try {
+            clearTimeout(this.completionTimer);
             console.log("Bulk operation finished!");
+            this.active = false;
             await this.downloadResults();
             this.listener.deleteSubscription();
             if (this.focus == "CREATE") {
@@ -280,10 +354,12 @@ class SHMutator extends ShopifyBulkHandler_1.default {
                 //Start Bulk Operation
                 await this.startBulk();
                 this.listener.createSubscription("mutation");
+                this.checkBulkStatus(resolve, reject);
                 resolve(this.listener.createWebListener("mutation", this.finishBulk.bind(this)));
             }
             catch (err) {
                 if (this.focus == "CREATE") {
+                    console.log(err);
                     resolve(await this.process('UPDATE'));
                 }
                 return reject(err);
