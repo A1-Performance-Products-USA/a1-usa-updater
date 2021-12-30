@@ -142,7 +142,7 @@ class MSLoader {
             value: priceTag,
             namespace: "prod_info",
             description: "",
-            type: "multi_line_text_field"
+            type: "single_line_text_field"
         };
     }
     async translateToShopifyInventory(product) {
