@@ -122,6 +122,29 @@ class MSLoader {
         }
         return [product.category_1.replace(/,/g, ''), product.category_2.replace(/,/g, ''), product.category_3.replace(/,/g, ''), product.brand.replace(/,/g, ''), priceTag];
     }
+    setPriceMetafield(product) {
+        let priceNum = parseFloat(product.price);
+        let priceTag = "Less than $25";
+        if (priceNum >= 25 && priceNum < 50) {
+            priceTag = "$25 to $50";
+        }
+        else if (priceNum >= 50 && priceNum < 100) {
+            priceTag = "$50 to $100";
+        }
+        else if (priceNum >= 100 && priceNum < 500) {
+            priceTag = "$100 to $500";
+        }
+        else if (priceNum >= 500) {
+            priceTag = "More than $500";
+        }
+        return {
+            key: "price_range",
+            value: priceTag,
+            namespace: "prod_info",
+            description: "",
+            type: "multi_line_text_field"
+        };
+    }
     async translateToShopifyInventory(product) {
         return new Promise((resolve, reject) => {
             resolve(new ShopifyProduct_1.default({
@@ -156,8 +179,8 @@ class MSLoader {
                         "namespace": "product_extra",
                         "value": product.man_part_number || "",
                         "type": "single_line_text_field"
-                    }
-                    //TODO Possible Prop65 Addition HERE
+                    },
+                    this.setPriceMetafield(product)
                 ],
                 images: {
                     altText: product.description,
