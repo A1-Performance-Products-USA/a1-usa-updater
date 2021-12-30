@@ -5,10 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = __importDefault(require("path"));
 require('dotenv').config({ path: path_1.default.join(__dirname, '.env') });
-const ChangeList_1 = __importDefault(require("./classes/Comparison/ChangeList"));
-const Comparison_1 = __importDefault(require("./classes/Comparison/Comparison"));
-const MotorState_1 = __importDefault(require("./classes/MotorState/MotorState"));
-const ShopifyHandler_1 = __importDefault(require("./classes/Shopify/ShopifyHandler"));
+const ChangeList_1 = __importDefault(require("@class/Comparison/ChangeList"));
+const Comparison_1 = __importDefault(require("@class/Comparison/Comparison"));
+const MotorState_1 = __importDefault(require("@class/MotorState/MotorState"));
+const ShopifyHandler_1 = __importDefault(require("@class/Shopify/ShopifyHandler"));
 const perf_hooks_1 = require("perf_hooks");
 var fs = require('fs');
 var util = require("util");

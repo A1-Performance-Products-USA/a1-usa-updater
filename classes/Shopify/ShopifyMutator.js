@@ -334,9 +334,9 @@ class SHMutator extends ShopifyBulkHandler_1.default {
         return new Promise(async (resolve, reject) => {
             try {
                 if (focus == "CREATE" && createCount == 0)
-                    return resolve(this.listener.createWebListener("mutation", this.finishBulk.bind(this)));
+                    return resolve(this.listener.createWebListener("mutation", this.finishBulk.bind(this), this.checkBulkStatus.bind(this)));
                 if (focus == "UPDATE" && updateCount == 0)
-                    return resolve(this.listener.createWebListener("mutation", this.finishBulk.bind(this)));
+                    return resolve(this.listener.createWebListener("mutation", this.finishBulk.bind(this), this.checkBulkStatus.bind(this)));
                 this.setFocus(focus);
                 console.log("Starting the update on the " + focus + "...");
                 //Get Upload Information
@@ -354,8 +354,7 @@ class SHMutator extends ShopifyBulkHandler_1.default {
                 //Start Bulk Operation
                 await this.startBulk();
                 this.listener.createSubscription("mutation");
-                this.checkBulkStatus(resolve, reject);
-                resolve(this.listener.createWebListener("mutation", this.finishBulk.bind(this)));
+                resolve(this.listener.createWebListener("mutation", this.finishBulk.bind(this), this.checkBulkStatus.bind(this)));
             }
             catch (err) {
                 if (this.focus == "CREATE") {

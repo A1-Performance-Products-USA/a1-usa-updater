@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
 const csv = require("csv-parser");
-const MotorStateProduct_1 = __importDefault(require("../MotorState/MotorStateProduct"));
-const ShopifyProduct_1 = __importDefault(require("../Shopify/ShopifyProduct"));
-const ShopifyVariant_1 = __importDefault(require("../Shopify/ShopifyVariant"));
+const MotorStateProduct_1 = __importDefault(require("@class/MotorState/MotorStateProduct"));
+const ShopifyProduct_1 = __importDefault(require("@class/Shopify/ShopifyProduct"));
+const ShopifyVariant_1 = __importDefault(require("@class/Shopify/ShopifyVariant"));
 class MSLoader {
     saveLocation;
     saveFileName;
