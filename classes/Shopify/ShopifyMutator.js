@@ -252,7 +252,7 @@ class SHMutator extends ShopifyBulkHandler_1.default {
             }
         });
     }
-    async checkBulkStatus(resolve, reject) {
+    checkBulkStatus(resolve, reject) {
         this.completionTimer = setTimeout(async () => {
             try {
                 if (!this.active)
