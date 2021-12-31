@@ -51,9 +51,9 @@ class Comparison {
                     fields.productType = ms_product.productType;
                 }
                 //Check vendor
-                //if (ms_product.vendor != sh_product.vendor) {
-                fields.vendor = ms_product.vendor;
-                //}
+                if (ms_product.vendor != sh_product.vendor) {
+                    fields.vendor = ms_product.vendor;
+                }
                 //Check metafields
                 fields.metafields = [];
                 for (let i = 0; i < ms_product.metafields.length; i++) {
