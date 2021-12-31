@@ -122,6 +122,14 @@ class MSLoader {
         }
         return [product.category_1.replace(/,/g, ''), product.category_2.replace(/,/g, ''), product.category_3.replace(/,/g, ''), product.brand.replace(/,/g, ''), priceTag];
     }
+    formatBrand(product) {
+        let brand = product.brand;
+        let brandWords = brand.split(' ');
+        for (let i = 0; i < brandWords.length; i++) {
+            brandWords[i] = brandWords[i][0].toUpperCase() + brandWords[i].substring(1);
+        }
+        return brandWords.join(' ');
+    }
     setPriceMetafield(product) {
         let priceNum = parseFloat(product.price);
         let priceTag = "Less than $25";
@@ -161,7 +169,7 @@ class MSLoader {
                 handle: product.handle,
                 title: `${product.long_description || ""}`.substring(0, 255),
                 descriptionHtml: `<p>${product.long_description || ""}</p><p>${product.ms_notes.replace(/\\/g, '-') || ""}</p>`,
-                vendor: product.brand || "",
+                vendor: this.formatBrand(product) || "",
                 productType: product.category_3 || "Unclassified",
                 tags: this.createTags(product),
                 status: 'ACTIVE',
