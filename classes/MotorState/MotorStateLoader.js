@@ -120,10 +120,10 @@ class MSLoader {
         else if (priceNum >= 500) {
             priceTag = "More than $500";
         }
-        return [product.category_1.replace(/,/g, ''), product.category_2.replace(/,/g, ''), product.category_3.replace(/,/g, ''), product.brand.replace(/,/g, ''), priceTag];
+        return [product.category_1.replace(/,/g, ''), product.category_2.replace(/,/g, ''), product.category_3.replace(/,/g, ''), this.formatBrand(product), priceTag];
     }
     formatBrand(product) {
-        let brand = product.brand;
+        let brand = product.brand.replace(/,/g, '');
         let brandWords = brand.split(' ');
         for (let i = 0; i < brandWords.length; i++) {
             brandWords[i] = brandWords[i][0].toUpperCase() + brandWords[i].substring(1);
