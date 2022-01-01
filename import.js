@@ -54,10 +54,15 @@ perfObserver.observe({ entryTypes: ["measure"] });
         perf_hooks_1.performance.mark("CMPR_LOAD_TIME_END");
         perf_hooks_1.performance.measure("CMPR_LOAD_TIME", "CMPR_LOAD_TIME_START", "CMPR_LOAD_TIME_END");
         console.log('Files written... Starting Updater...');
-        perf_hooks_1.performance.mark("UPDT_LOAD_TIME_START");
-        await shopify.updateProducts(changeList.createCount, changeList.updateCount);
-        perf_hooks_1.performance.mark("UPDT_LOAD_TIME_END");
-        perf_hooks_1.performance.measure("UPDT_LOAD_TIME", "UPDT_LOAD_TIME_START", "UPDT_LOAD_TIME_END");
+        if (changeList.updateCount > 0 || changeList.createCount > 0) {
+            perf_hooks_1.performance.mark("UPDT_LOAD_TIME_START");
+            await shopify.updateProducts(changeList.createCount, changeList.updateCount);
+            perf_hooks_1.performance.mark("UPDT_LOAD_TIME_END");
+            perf_hooks_1.performance.measure("UPDT_LOAD_TIME", "UPDT_LOAD_TIME_START", "UPDT_LOAD_TIME_END");
+        }
+        else {
+            console.log('No creations or changes were found.');
+        }
         console.log('Process Complete!');
         perf_hooks_1.performance.mark("APP_LOAD_TIME_END");
         perf_hooks_1.performance.measure("APP_LOAD_TIME", "APP_LOAD_TIME_START", "APP_LOAD_TIME_END");
