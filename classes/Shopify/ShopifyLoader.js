@@ -60,10 +60,12 @@ class SHLoader {
     async attachProductVariants(products, variants) {
         return new Promise((resolve, reject) => {
             let keys = Object.keys(variants);
+            let counter = 0;
             keys.forEach(async (key, i) => {
+                counter++;
                 try {
                     products[variants[key].__parentId].setVariant(variants[key]);
-                    if (i == (keys.length - 1))
+                    if (counter == keys.length)
                         resolve(products);
                 }
                 catch (err) {
@@ -77,9 +79,11 @@ class SHLoader {
         return new Promise((resolve, reject) => {
             let mappedProducts = new Map();
             let keys = Object.keys(products);
+            let counter = 0;
             keys.forEach(async (key, i) => {
+                counter++;
                 mappedProducts.set(products[key].getHandle(), products[key]);
-                if (i == (keys.length - 1))
+                if (counter == keys.length)
                     resolve(mappedProducts);
             });
         });

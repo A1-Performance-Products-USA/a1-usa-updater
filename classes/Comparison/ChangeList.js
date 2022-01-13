@@ -84,12 +84,14 @@ class ChangeList {
             if (this.productCreates.length <= 0)
                 return resolve(0);
             try {
+                let counter = 0;
                 this.productCreates.forEach((v, i) => {
+                    counter++;
                     if (i >= 999) {
                         return resolve(this.createCount);
                     }
                     fs_1.default.appendFileSync(this.createPath + "_" + this.createCount + '.jsonl', JSON.stringify(v) + "\r\n");
-                    if (i == this.productCreates.length - 1)
+                    if (counter == this.productCreates.length)
                         return resolve(this.createCount);
                     let stat = fs_1.default.statSync(this.createPath + "_" + this.createCount + '.jsonl');
                     if (stat.size >= 19000000) {
@@ -107,9 +109,11 @@ class ChangeList {
             if (this.productUpdates.length <= 0)
                 return resolve(0);
             try {
+                let counter = 0;
                 this.productUpdates.forEach((v, i) => {
+                    counter++;
                     fs_1.default.appendFileSync(this.updatePath + "_" + this.updateCount + '.jsonl', JSON.stringify(v) + "\r\n");
-                    if (i == this.productUpdates.length - 1)
+                    if (counter == this.productUpdates.length)
                         return resolve(this.updateCount);
                     let stat = fs_1.default.statSync(this.updatePath + "_" + this.updateCount + '.jsonl');
                     if (stat.size >= 19000000) {
