@@ -22,6 +22,7 @@ class SHMutator extends ShopifyBulkHandler_1.default {
     mutationId;
     active;
     completionTimer;
+    collection;
     constructor(requester, listener, saveLocation, saveFileName) {
         super(requester, listener, saveLocation, saveFileName, "mutation");
         this.uploadInfo = {
@@ -32,6 +33,7 @@ class SHMutator extends ShopifyBulkHandler_1.default {
         this.createCount = 0;
         this.updateCount = 0;
         this.active = false;
+        this.collection = false;
         this.finishBulk = this.finishBulk.bind(this);
     }
     setSavePaths(dir, create, update) {
@@ -117,11 +119,11 @@ class SHMutator extends ShopifyBulkHandler_1.default {
         console.log(this.uploadInfo);
         return Promise.resolve(req.body["data"].stagedUploadsCreate.stagedTargets[0]);
     }
-    async startBulk(query, collection) {
+    async startBulk(query) {
         try {
             console.log('Starting bulk operation ' + this.kind + ' for ' + this.uploadInfo.key);
             const req = await this.requester.query({
-                data: (collection)
+                data: (this.collection)
                     ? ((this.focus == "CREATE")
                         ? `
                          mutation {
@@ -365,6 +367,8 @@ class SHMutator extends ShopifyBulkHandler_1.default {
     async process(focus, createCount, updateCount, collection) {
         this.createCount = createCount || this.createCount;
         this.updateCount = updateCount || this.updateCount;
+        if (collection)
+            this.collection = collection;
         return new Promise(async (resolve, reject) => {
             try {
                 if (focus == "CREATE" && createCount == 0)
@@ -386,7 +390,7 @@ class SHMutator extends ShopifyBulkHandler_1.default {
             }
             try {
                 //Start Bulk Operation
-                await this.startBulk(null, collection);
+                await this.startBulk();
                 this.listener.createSubscription("mutation");
                 resolve(this.listener.createWebListener("mutation", this.finishBulk.bind(this), this.checkBulkStatus.bind(this)));
             }

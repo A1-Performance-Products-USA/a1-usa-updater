@@ -81,16 +81,18 @@ class ChangeList {
             }
         });
     }
-    addCollection(product) {
+    addCollection(collection) {
+        delete collection['productsCount'];
         this.collectionCreates = this.collectionCreates || [];
         this.collectionCreates.push({
-            input: product
+            input: collection
         });
     }
-    updateCollection(update) {
+    updateCollection(collection) {
+        delete collection['productsCount'];
         this.collectionUpdates = this.collectionUpdates || [];
         this.collectionUpdates.push({
-            input: update
+            input: collection
         });
     }
     disableCollection(id, handle) {
