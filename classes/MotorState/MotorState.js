@@ -72,6 +72,8 @@ class MotorState {
         catList.forEach((category) => {
             if (this.collectionCache.includes(category.handle))
                 return;
+            if (category.title == null || category.title == "")
+                return;
             if (category.image.src != "") {
                 this.collectionCache.push(category.handle);
             }
