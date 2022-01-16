@@ -40,9 +40,6 @@ perfObserver.observe({ entryTypes: ["measure"] });
         await motorstate.loadCategories();
         perf_hooks_1.performance.mark("MS_LOAD_TIME_END");
         perf_hooks_1.performance.measure("MS_LOAD_TIME", "MS_LOAD_TIME_START", "MS_LOAD_TIME_END");
-        console.log(motorstate.allCollections);
-        console.log(motorstate.allCollections.size);
-        console.log(motorstate.collectionCache.length);
         perf_hooks_1.performance.mark("SH_LOAD_TIME_START");
         console.log("Loading Shopify Products...");
         await shopify.getCollections([
