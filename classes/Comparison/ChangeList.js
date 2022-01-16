@@ -82,6 +82,7 @@ class ChangeList {
         });
     }
     addCollection(collection) {
+        delete collection['id'];
         delete collection['productsCount'];
         this.collectionCreates = this.collectionCreates || [];
         this.collectionCreates.push({

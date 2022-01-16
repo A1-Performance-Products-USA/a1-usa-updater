@@ -306,12 +306,9 @@ class Comparison {
                     fields.ruleSet = ms_collection.ruleSet;
                 }
                 else {
-                    if (ms_collection.ruleSet.appliedDisjunctively != sh_collection.ruleSet.appliedDisjunctively) {
-                        fields.ruleSet = fields.ruleSet || {};
-                        fields.ruleSet.appliedDisjunctively = ms_collection.ruleSet.appliedDisjunctively;
-                    }
                     if (ms_collection.ruleSet.rules != sh_collection.ruleSet.rules) {
                         fields.ruleSet = fields.ruleSet || {};
+                        fields.ruleSet.appliedDisjunctively = ms_collection.ruleSet.appliedDisjunctively;
                         fields.ruleSet.rules = ms_collection.ruleSet.rules;
                     }
                 }
