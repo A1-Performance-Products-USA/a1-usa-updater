@@ -88,6 +88,7 @@ class ChangeList {
         });
     }
     updateCollection(update) {
+        this.collectionUpdates = this.collectionUpdates || [];
         this.collectionUpdates.push({
             input: update
         });
