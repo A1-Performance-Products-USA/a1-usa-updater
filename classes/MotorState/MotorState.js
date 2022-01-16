@@ -11,6 +11,8 @@ class MotorState {
     prop65;
     fetcher;
     loader;
+    allCollections;
+    collectionCache;
     constructor(fetchLocation, fetchFileName, saveLocation, saveFileName, exclusionList) {
         this.fetcher = new MotorStateFetcher_1.MSFetcher(fetchLocation, fetchFileName, saveLocation, saveFileName);
         this.loader = new MotorStateLoader_1.default(saveLocation, this.fetcher.saveFileName);
@@ -58,6 +60,30 @@ class MotorState {
         return new Promise(async (resolve, reject) => {
             await this.fetcher.fetchInformation();
             resolve(await this.loader.loadInventory(this.addProduct));
+        });
+    }
+    checkCategoryCache(handle) {
+        this.collectionCache = this.collectionCache || new Array();
+        return this.collectionCache.includes(handle);
+    }
+    addCategory(catList) {
+        this.allCollections = this.allCollections || new Map();
+        this.collectionCache = this.collectionCache || new Array();
+        catList.forEach((category) => {
+            if (this.collectionCache.includes(category.handle))
+                return;
+            if (category.image.src != "") {
+                this.collectionCache.push(category.handle);
+            }
+            this.allCollections.set(category.handle, category);
+        });
+    }
+    async loadCategories() {
+        return new Promise(async (resolve, reject) => {
+            await this.fetcher.fetchInformation();
+            this.allCollections = this.allCollections || new Map();
+            this.collectionCache = this.collectionCache || new Array();
+            resolve(await this.loader.loadCategories(this.addCategory.bind(this), this.checkCategoryCache.bind(this)));
         });
     }
 }

@@ -117,11 +117,45 @@ class SHMutator extends ShopifyBulkHandler_1.default {
         console.log(this.uploadInfo);
         return Promise.resolve(req.body["data"].stagedUploadsCreate.stagedTargets[0]);
     }
-    async startBulk() {
+    async startBulk(query, collection) {
         try {
             console.log('Starting bulk operation ' + this.kind + ' for ' + this.uploadInfo.key);
             const req = await this.requester.query({
-                data: this.focus == "CREATE"
+                data: (collection)
+                    ? ((this.focus == "CREATE")
+                        ? `
+                         mutation {
+                              bulkOperationRunMutation(
+                                   mutation: "mutation call($input: CollectionInput!) { collectionCreate(input: $input) { collection { id handle title image { id src altText } } userErrors { message field } } }",
+                                   stagedUploadPath: "${this.uploadInfo.key}") {
+                                   bulkOperation {
+                                        id
+                                        url
+                                        status
+                                   }
+                                   userErrors {
+                                        message
+                                        field
+                                   }
+                              }
+                         }
+                    ` : `
+                         mutation {
+                              bulkOperationRunMutation(
+                                   mutation: "mutation call($input: CollectionInput!) { collectionUpdate(input: $input) { collection { id handle title image { id src altText } } userErrors { message field } } }",
+                                   stagedUploadPath: "${this.uploadInfo.key}") {
+                                   bulkOperation {
+                                        id
+                                        url
+                                        status
+                                   }
+                                   userErrors {
+                                        message
+                                        field
+                                   }
+                              }
+                         }
+                    `) : ((this.focus == "CREATE")
                     ? `
                          mutation {
                               bulkOperationRunMutation(
@@ -155,7 +189,7 @@ class SHMutator extends ShopifyBulkHandler_1.default {
                                    }
                               }
                          }
-                    `
+                    `)
             });
             if (req.body["data"].bulkOperationRunMutation.bulkOperation) {
                 this.mutationId = req.body["data"].bulkOperationRunMutation.bulkOperation.id;
@@ -328,7 +362,7 @@ class SHMutator extends ShopifyBulkHandler_1.default {
             reject(err);
         }
     }
-    async process(focus, createCount, updateCount) {
+    async process(focus, createCount, updateCount, collection) {
         this.createCount = createCount || this.createCount;
         this.updateCount = updateCount || this.updateCount;
         return new Promise(async (resolve, reject) => {
@@ -352,7 +386,7 @@ class SHMutator extends ShopifyBulkHandler_1.default {
             }
             try {
                 //Start Bulk Operation
-                await this.startBulk();
+                await this.startBulk(null, collection);
                 this.listener.createSubscription("mutation");
                 resolve(this.listener.createWebListener("mutation", this.finishBulk.bind(this), this.checkBulkStatus.bind(this)));
             }

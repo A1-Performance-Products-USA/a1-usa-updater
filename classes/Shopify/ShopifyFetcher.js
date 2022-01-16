@@ -10,6 +10,7 @@ const path = require("path");
 class SHFetcher extends ShopifyBulkHandler_1.default {
     bulkProductQuery;
     bulkInventoryQuery;
+    bulkCollectionQuery;
     process;
     constructor(requester, listener, saveLocation, saveFileName) {
         super(requester, listener, saveLocation, saveFileName, 'query');
@@ -147,6 +148,52 @@ class SHFetcher extends ShopifyBulkHandler_1.default {
                     }
                `
         };
+        this.bulkCollectionQuery = {
+            data: `
+                    mutation {
+                         bulkOperationRunQuery(query: "{
+                              collections (first: 5000) {
+                                   edges {
+                                       node {
+                                             id
+                                             title
+                                             handle
+                                             productsCount
+                                             sortOrder
+                                             seo {
+                                                  title
+                                                  description
+                                             }
+                                             ruleSet {
+                                                  appliedDisjunctively
+                                                  rules {
+                                                       column
+                                                       condition
+                                                       relation
+                                                  }
+                                             }
+                                             image {
+                                                  id
+                                                  src
+                                                  altText
+                                           }
+                                       }
+                                   }
+                              }
+                         }") 
+                         {
+                              bulkOperation {
+                                   id
+                                   status
+                              }
+                              userErrors {
+                                   field
+                                   message
+                              }
+                         }
+                    }
+               `
+        };
         this.finishBulk = this.finishBulk.bind(this);
     }
     //Start the query of all files.
@@ -205,6 +252,21 @@ class SHFetcher extends ShopifyBulkHandler_1.default {
                     return resolve(null);
                 }
                 this.startBulk(this.bulkInventoryQuery);
+                this.listener.createSubscription('query');
+                resolve(await this.listener.createWebListener('query', this.finishBulk));
+            }
+            catch (err) {
+                reject(err);
+            }
+        });
+    }
+    async fetchCollections() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (fs_1.default.existsSync(path.join(this.saveLocation, this.saveFileName))) {
+                    return resolve(null);
+                }
+                this.startBulk(this.bulkCollectionQuery);
                 this.listener.createSubscription('query');
                 resolve(await this.listener.createWebListener('query', this.finishBulk));
             }

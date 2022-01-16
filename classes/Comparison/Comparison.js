@@ -3,6 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class Comparison {
     ms_products;
     sh_products;
+    ms_collections;
+    sh_collections;
     changeList;
     compareFields;
     stats;
@@ -13,6 +15,8 @@ class Comparison {
         this.stats = {
             ms_products: 0,
             sh_products: 0,
+            ms_collections: 0,
+            sh_collections: 0,
             changes: 0,
             creations: 0,
             archives: 0,
@@ -259,6 +263,130 @@ class Comparison {
                 console.log(this.stats);
                 console.log('Saving changes...');
                 resolve(await this.changeList.saveChangeFiles());
+            }
+            catch (err) {
+                reject(err);
+            }
+        });
+    }
+    async compareCollectionItem(ms_collection, handle) {
+        console.log("Comparing Item: " + ms_collection.handle);
+        return new Promise((resolve, reject) => {
+            try {
+                //Check product exists on shopify.
+                if (!this.sh_collections.has(handle)) {
+                    //Write collection to be created.
+                    return resolve(this.changeList.addCollection(ms_collection));
+                }
+                const sh_collection = this.sh_collections.get(handle);
+                let fields = {
+                    id: sh_collection.id
+                };
+                if (ms_collection.title != sh_collection.title) {
+                    fields.title = ms_collection.title;
+                }
+                if (ms_collection.sortOrder != sh_collection.sortOrder) {
+                    fields.sortOrder = ms_collection.sortOrder;
+                }
+                if (!sh_collection.seo || sh_collection.seo == null) {
+                    fields.seo = ms_collection.seo;
+                }
+                else {
+                    if (ms_collection.seo.title != ms_collection.seo.title) {
+                        fields.seo = fields.seo || {};
+                        fields.seo.title = ms_collection.seo.title;
+                    }
+                    if (ms_collection.seo.description != ms_collection.seo.description) {
+                        fields.seo = fields.seo || {};
+                        fields.seo.description = ms_collection.seo.description;
+                    }
+                }
+                if (!sh_collection.ruleSet || sh_collection.ruleSet == null) {
+                    fields.ruleSet = ms_collection.ruleSet;
+                }
+                else {
+                    if (ms_collection.ruleSet.appliedDisjunctively != sh_collection.ruleSet.appliedDisjunctively) {
+                        fields.ruleSet = fields.ruleSet || {};
+                        fields.ruleSet.appliedDisjunctively = ms_collection.ruleSet.appliedDisjunctively;
+                    }
+                    if (ms_collection.ruleSet.rules != sh_collection.ruleSet.rules) {
+                        fields.ruleSet = fields.ruleSet || {};
+                        fields.ruleSet.rules = ms_collection.ruleSet.rules;
+                    }
+                }
+                if (!sh_collection.image || sh_collection.image == null) {
+                    fields.image = ms_collection.image;
+                }
+                else {
+                    if (ms_collection.image.altText != sh_collection.image.altText) {
+                        fields.image = fields.image || {};
+                        fields.image.id = sh_collection.image.id;
+                        fields.image.altText = ms_collection.image.altText;
+                    }
+                    if (ms_collection.image.src != sh_collection.image.src) {
+                        fields.image = fields.image || {};
+                        fields.image.id = sh_collection.image.id;
+                        fields.image.src = ms_collection.image.src;
+                    }
+                }
+                this.sh_collections.delete(handle);
+                if (Object.keys(fields).length <= 1) {
+                    console.log("No update necessary.");
+                    this.stats.no_changes++;
+                    return resolve('NO_UPDATE_NECESSARY');
+                }
+                else {
+                    console.log("Updating...");
+                    this.stats.changes++;
+                    return resolve(this.changeList.updateCollection(fields));
+                }
+            }
+            catch (err) {
+                reject(err);
+            }
+        });
+    }
+    async removeOldCollections() {
+        return new Promise((resolve, reject) => {
+            let counter = 0;
+            let ogSize = this.sh_collections.size;
+            if (ogSize <= 0)
+                return resolve(this.changeList);
+            this.sh_collections.forEach((collection, handle) => {
+                console.log('Disabling Collection: ' + handle);
+                this.changeList.disableCollection(collection.id, handle);
+                this.stats.archives++;
+                counter++;
+                if (counter == this.sh_collections.size)
+                    return resolve(this.changeList);
+            });
+        });
+    }
+    async compareCollections() {
+        return new Promise((resolve, reject) => {
+            let counter = 0;
+            this.stats.ms_collections = this.ms_collections.size;
+            this.stats.sh_collections = this.sh_collections.size;
+            this.ms_collections.forEach(async (collection, handle, map) => {
+                await this.compareCollectionItem(collection, handle);
+                counter++;
+                if (counter == this.ms_collections.size)
+                    return resolve();
+            });
+        });
+    }
+    async processCollections(ms_collections, sh_collections) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                this.ms_collections = this.ms_collections || ms_collections;
+                this.sh_collections = this.sh_collections || sh_collections;
+                await this.compareCollections();
+                console.log('Compared... Attempting to remove old...');
+                //await this.removeOldCollections();
+                console.log('These are the Collection Update Stats:');
+                console.log(this.stats);
+                console.log('Saving changes...');
+                resolve(await this.changeList.saveCollectionFiles());
             }
             catch (err) {
                 reject(err);

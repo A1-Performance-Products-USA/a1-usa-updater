@@ -18,6 +18,7 @@ class ShopifyHandler {
     listener;
     loader;
     products;
+    collections;
     constructor(shop, token, handlerURL, port, saveLocation, cacheFileName) {
         this.shop = shop;
         this.token = token;
@@ -40,6 +41,13 @@ class ShopifyHandler {
     }
     async updateInventory(updateCount) {
         return Promise.resolve(await this.mutator.process('UPDATE', 0, updateCount));
+    }
+    async updateCollections(createCount, updateCount) {
+        return Promise.resolve(await this.mutator.process('CREATE', createCount, updateCount, true));
+    }
+    async getCollections(exclusionList) {
+        await this.fetcher.fetchCollections();
+        return this.collections = await this.loader.loadCollections(exclusionList);
     }
     terminate() {
         this.listener.deleteSubscription();

@@ -8,6 +8,8 @@ const fs_1 = __importDefault(require("fs"));
 class ChangeList {
     productUpdates;
     productCreates;
+    collectionUpdates;
+    collectionCreates;
     createPath;
     updatePath;
     createFileName;
@@ -79,6 +81,20 @@ class ChangeList {
             }
         });
     }
+    addCollection(product) {
+        this.collectionCreates = this.collectionCreates || [];
+        this.collectionCreates.push({
+            input: product
+        });
+    }
+    updateCollection(update) {
+        this.collectionUpdates.push({
+            input: update
+        });
+    }
+    disableCollection(id, handle) {
+        // TODO: Delete product from store. (Not implemented on the shopify mutator)
+    }
     writeProductCreateFile() {
         return new Promise((resolve, reject) => {
             if (this.productCreates.length <= 0)
@@ -126,11 +142,73 @@ class ChangeList {
             }
         });
     }
+    writeCollectionCreateFile() {
+        return new Promise((resolve, reject) => {
+            if (this.collectionCreates.length <= 0)
+                return resolve(0);
+            try {
+                let counter = 0;
+                this.collectionCreates.forEach((v, i) => {
+                    counter++;
+                    if (i >= 999) {
+                        return resolve(this.createCount);
+                    }
+                    fs_1.default.appendFileSync(this.createPath + "_" + this.createCount + '.jsonl', JSON.stringify(v) + "\r\n");
+                    if (counter == this.collectionCreates.length)
+                        return resolve(this.createCount);
+                    let stat = fs_1.default.statSync(this.createPath + "_" + this.createCount + '.jsonl');
+                    if (stat.size >= 19000000) {
+                        this.createCount++;
+                    }
+                });
+            }
+            catch (err) {
+                reject(err);
+            }
+        });
+    }
+    writeCollectionUpdateFile() {
+        return new Promise((resolve, reject) => {
+            if (this.collectionUpdates.length <= 0)
+                return resolve(0);
+            try {
+                let counter = 0;
+                this.collectionUpdates.forEach((v, i) => {
+                    counter++;
+                    fs_1.default.appendFileSync(this.updatePath + "_" + this.updateCount + '.jsonl', JSON.stringify(v) + "\r\n");
+                    if (counter == this.collectionUpdates.length)
+                        return resolve(this.updateCount);
+                    let stat = fs_1.default.statSync(this.updatePath + "_" + this.updateCount + '.jsonl');
+                    if (stat.size >= 19000000) {
+                        this.updateCount++;
+                    }
+                });
+            }
+            catch (err) {
+                reject(err);
+            }
+        });
+    }
     async saveChangeFiles() {
         return new Promise(async (resolve, reject) => {
             try {
                 await this.writeProductCreateFile();
                 await this.writeProductUpdateFile();
+                resolve({
+                    create: this.createPath,
+                    update: this.updatePath
+                });
+            }
+            catch (err) {
+                reject(err);
+            }
+        });
+    }
+    async saveCollectionFiles() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await this.writeCollectionCreateFile();
+                await this.writeCollectionUpdateFile();
                 resolve({
                     create: this.createPath,
                     update: this.updatePath

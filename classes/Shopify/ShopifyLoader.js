@@ -7,6 +7,7 @@ const readline_1 = __importDefault(require("readline"));
 const fs_1 = __importDefault(require("fs"));
 const ShopifyProduct_1 = __importDefault(require("./ShopifyProduct"));
 const ShopifyVariant_1 = __importDefault(require("./ShopifyVariant"));
+const ShopifyCategory_1 = __importDefault(require("./ShopifyCategory"));
 class SHLoader {
     saveLocation;
     saveFileName;
@@ -95,6 +96,31 @@ class SHLoader {
                 const parsedProducts = await this.attachProductVariants(productsRaw, variantsRaw);
                 const products = await this.mapProducts(parsedProducts);
                 resolve(products);
+            }
+            catch (err) {
+                reject(err);
+            }
+        });
+    }
+    async loadCollections(exclusionList) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const rl = readline_1.default.createInterface({
+                    input: fs_1.default.createReadStream(this.saveLocation + '/' + this.saveFileName)
+                });
+                let collections = new Map();
+                rl.on('line', (line) => {
+                    let lineObject = JSON.parse(line);
+                    if (exclusionList.includes(lineObject.handle))
+                        return;
+                    collections.set(lineObject.handle, new ShopifyCategory_1.default(lineObject));
+                });
+                rl.on('close', async () => {
+                    resolve(collections);
+                });
+                rl.on('error', (err) => {
+                    reject(err);
+                });
             }
             catch (err) {
                 reject(err);
