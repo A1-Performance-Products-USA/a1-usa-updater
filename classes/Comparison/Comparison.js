@@ -275,7 +275,8 @@ class Comparison {
             try {
                 //Check product exists on shopify.
                 if (!this.sh_collections.has(handle)) {
-                    //Write collection to be created.
+                    console.log("Not found. Creating...");
+                    this.stats.creations++;
                     return resolve(this.changeList.addCollection(ms_collection));
                 }
                 const sh_collection = this.sh_collections.get(handle);
