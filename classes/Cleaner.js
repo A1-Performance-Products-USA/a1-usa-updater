@@ -33,7 +33,7 @@ class Cleaner {
             filenames.forEach((file, i) => {
                 if (this.getTimeDifference(file) > this.cacheDays) {
                     fs.unlinkSync(`${this.cacheDir}/${file}`);
-                    console.log("Removing file: " + `${this.logDir}/${file}`);
+                    console.log("Removing file: " + `${this.cacheDir}/${file}`);
                 }
             });
         }

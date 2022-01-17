@@ -13,6 +13,7 @@ class MotorState {
     loader;
     allCollections;
     collectionCache;
+    collectionImageCache;
     constructor(fetchLocation, fetchFileName, saveLocation, saveFileName, exclusionList) {
         this.fetcher = new MotorStateFetcher_1.MSFetcher(fetchLocation, fetchFileName, saveLocation, saveFileName);
         this.loader = new MotorStateLoader_1.default(saveLocation, this.fetcher.saveFileName);
@@ -69,13 +70,17 @@ class MotorState {
     addCategory(catList) {
         this.allCollections = this.allCollections || new Map();
         this.collectionCache = this.collectionCache || new Array();
+        this.collectionImageCache = this.collectionImageCache || new Array();
         catList.forEach((category) => {
             if (this.collectionCache.includes(category.handle))
+                return;
+            if (this.collectionImageCache.includes(category.image.src))
                 return;
             if (category.title == null || category.title == "")
                 return;
             if (category.image.src != "") {
                 this.collectionCache.push(category.handle);
+                this.collectionImageCache.push(category.image.src);
             }
             this.allCollections.set(category.handle, category);
         });
