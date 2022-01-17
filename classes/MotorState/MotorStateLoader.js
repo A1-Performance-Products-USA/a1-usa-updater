@@ -234,7 +234,10 @@ class MSLoader {
                             }
                         ]
                     },
-                    image: null
+                    image: {
+                        src: product.image_url || "",
+                        altText: product.category_1
+                    }
                 }),
                 new ShopifyCategory_1.default({
                     title: product.category_2,
@@ -259,7 +262,10 @@ class MSLoader {
                             }
                         ]
                     },
-                    image: null
+                    image: {
+                        src: product.image_url || "",
+                        altText: product.category_2
+                    }
                 }),
                 new ShopifyCategory_1.default({
                     title: product.category_3,
@@ -289,7 +295,10 @@ class MSLoader {
                             }
                         ]
                     },
-                    image: null
+                    image: {
+                        src: product.image_url || "",
+                        altText: product.category_3
+                    }
                 })
             ]);
         });
