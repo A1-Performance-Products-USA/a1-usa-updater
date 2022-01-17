@@ -16,7 +16,7 @@ class ShopifyCategory {
         this.productsCount = info.productsCount || 0;
         this.sortOrder = info.sortOrder || "BEST_SELLING";
         this.ruleSet = info.ruleSet || {};
-        this.ruleSet.rules = info.ruleSet.rules || [];
+        this.ruleSet.rules = info["ruleSet"]["rules"] || [];
         this.image = info.image || {};
         this.seo = info.seo || {};
     }
