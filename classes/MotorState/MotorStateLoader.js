@@ -142,6 +142,7 @@ class MSLoader {
                 skipLines: 1
             }))
                 .on('data', async (data) => {
+                console.log('adding category for product: ' + data.part_number);
                 //if (cacheCheck(data.category_1.toLowerCase().replace(/[^a-z0-9]+/g, '-') + "_" + data.category_2.toLowerCase().replace(/[^a-z0-9]+/g, '-') + "_" + data.category_3.toLowerCase().replace(/[^a-z0-9]+/g, '-'))) return;
                 fn(await this.translateToShopifyCategory(new MotorStateProduct_1.default(data)));
             })
