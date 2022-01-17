@@ -371,8 +371,10 @@ class SHMutator extends ShopifyBulkHandler_1.default {
             this.collection = collection;
         return new Promise(async (resolve, reject) => {
             try {
+                if (createCount == 0 && updateCount == 0)
+                    return resolve(true);
                 if (focus == "CREATE" && createCount == 0)
-                    return resolve(this.listener.createWebListener("mutation", this.finishBulk.bind(this), this.checkBulkStatus.bind(this)));
+                    return resolve(await this.process('UPDATE'));
                 if (focus == "UPDATE" && updateCount == 0)
                     return resolve(true);
                 this.setFocus(focus);

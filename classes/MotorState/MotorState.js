@@ -73,14 +73,13 @@ class MotorState {
         this.collectionImageCache = this.collectionImageCache || new Array();
         for (let i = 0; i < catList.length; i++) {
             var category = catList[i];
-            if (this.collectionCache.includes(category.handle))
-                return;
-            if (this.collectionImageCache.includes(category.image.src))
-                return;
             if (category.title == null || category.title == "")
                 return;
+            //if (this.collectionCache.includes(category.handle)) return;
+            if (this.collectionImageCache.includes(category.image.src))
+                return;
             if (category.image.src != "") {
-                this.collectionCache.push(category.handle);
+                //this.collectionCache.push(category.handle);
                 this.collectionImageCache.push(category.image.src);
             }
             this.allCollections.set(category.handle, category);
