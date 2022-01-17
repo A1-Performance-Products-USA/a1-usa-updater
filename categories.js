@@ -60,7 +60,7 @@ perfObserver.observe({ entryTypes: ["measure"] });
         console.log('Files written... Starting Updater...');
         if (changeList.updateCount > 0 || changeList.createCount > 0) {
             perf_hooks_1.performance.mark("UPDT_LOAD_TIME_START");
-            //await shopify.updateCollections(changeList.createCount, changeList.updateCount);
+            await shopify.updateCollections(changeList.createCount, changeList.updateCount);
             perf_hooks_1.performance.mark("UPDT_LOAD_TIME_END");
             perf_hooks_1.performance.measure("UPDT_LOAD_TIME", "UPDT_LOAD_TIME_START", "UPDT_LOAD_TIME_END");
         }
