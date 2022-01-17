@@ -94,9 +94,6 @@ class ChangeList {
     }
     updateCollection(collection) {
         delete collection['productsCount'];
-        if (collection['image']) {
-            delete collection['image']['id'];
-        }
         this.collectionUpdates = this.collectionUpdates || [];
         this.collectionUpdates.push({
             input: collection
