@@ -150,6 +150,7 @@ class ChangeList {
         });
     }
     writeCollectionCreateFile() {
+        this.collectionCreates = this.collectionCreates || [];
         return new Promise((resolve, reject) => {
             if (this.collectionCreates.length <= 0)
                 return resolve(0);
@@ -175,6 +176,7 @@ class ChangeList {
         });
     }
     writeCollectionUpdateFile() {
+        this.collectionUpdates = this.collectionUpdates || [];
         return new Promise((resolve, reject) => {
             if (this.collectionUpdates.length <= 0)
                 return resolve(0);
