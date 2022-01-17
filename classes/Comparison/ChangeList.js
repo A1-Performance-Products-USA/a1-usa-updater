@@ -84,6 +84,9 @@ class ChangeList {
     addCollection(collection) {
         delete collection['id'];
         delete collection['productsCount'];
+        if (collection['image'].src == "") {
+            delete collection['image'];
+        }
         this.collectionCreates = this.collectionCreates || [];
         this.collectionCreates.push({
             input: collection

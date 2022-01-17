@@ -90,6 +90,7 @@ class MotorState {
             await this.fetcher.fetchInformation();
             this.allCollections = this.allCollections || new Map();
             this.collectionCache = this.collectionCache || new Array();
+            this.collectionImageCache = this.collectionImageCache || new Array();
             resolve(await this.loader.loadCategories(this.addCategory.bind(this), this.checkCategoryCache.bind(this)));
         });
     }
