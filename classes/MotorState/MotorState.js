@@ -13,7 +13,6 @@ class MotorState {
     loader;
     allCollections;
     collectionCache;
-    collectionImageCache;
     constructor(fetchLocation, fetchFileName, saveLocation, saveFileName, exclusionList) {
         this.fetcher = new MotorStateFetcher_1.MSFetcher(fetchLocation, fetchFileName, saveLocation, saveFileName);
         this.loader = new MotorStateLoader_1.default(saveLocation, this.fetcher.saveFileName);
@@ -70,28 +69,22 @@ class MotorState {
     addCategory(catList) {
         this.allCollections = this.allCollections || new Map();
         this.collectionCache = this.collectionCache || new Array();
-        this.collectionImageCache = this.collectionImageCache || new Array();
-        for (let i = 0; i < catList.length; i++) {
-            var category = catList[i];
-            if (category.title == null || category.title == "")
-                return;
+        catList.forEach((category) => {
             if (this.collectionCache.includes(category.handle))
                 return;
-            console.log('Category passed the checks!');
+            if (category.title == null || category.title == "")
+                return;
             if (category.image.src != "") {
-                console.log('Category added to the cache');
                 this.collectionCache.push(category.handle);
-                this.collectionImageCache.push(category.image.src);
             }
             this.allCollections.set(category.handle, category);
-        }
+        });
     }
     async loadCategories() {
         return new Promise(async (resolve, reject) => {
             await this.fetcher.fetchInformation();
             this.allCollections = this.allCollections || new Map();
             this.collectionCache = this.collectionCache || new Array();
-            this.collectionImageCache = this.collectionImageCache || new Array();
             resolve(await this.loader.loadCategories(this.addCategory.bind(this), this.checkCategoryCache.bind(this)));
         });
     }
