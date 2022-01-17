@@ -74,11 +74,11 @@ class MotorState {
         for (let i = 0; i < catList.length; i++) {
             let category = catList[i];
             if (this.collectionImageCache.includes(category.image.src))
-                return;
+                continue;
             if (this.collectionCache.includes(category.handle))
-                return;
+                continue;
             if (category.title == null || category.title == "")
-                return;
+                continue;
             if (category.image.src != "") {
                 this.collectionCache.push(category.handle);
                 this.collectionImageCache.push(category.image.src);

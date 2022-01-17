@@ -142,7 +142,8 @@ class MSLoader {
                 skipLines: 1
             }))
                 .on('data', async (data) => {
-                //if (cacheCheck(data.category_1.toLowerCase().replace(/[^a-z0-9]+/g, '-') + "_" + data.category_2.toLowerCase().replace(/[^a-z0-9]+/g, '-') + "_" + data.category_3.toLowerCase().replace(/[^a-z0-9]+/g, '-'))) return;
+                if (cacheCheck(data.category_1.toLowerCase().replace(/[^a-z0-9]+/g, '-') + "_" + data.category_2.toLowerCase().replace(/[^a-z0-9]+/g, '-') + "_" + data.category_3.toLowerCase().replace(/[^a-z0-9]+/g, '-')))
+                    return;
                 //console.log('Adding categories for ' + data.part_number);
                 fn(await this.translateToShopifyCategory(new MotorStateProduct_1.default(data)));
             })
