@@ -71,7 +71,8 @@ class MotorState {
         this.allCollections = this.allCollections || new Map();
         this.collectionCache = this.collectionCache || new Array();
         this.collectionImageCache = this.collectionImageCache || new Array();
-        catList.forEach((category) => {
+        for (let i = 0; i < catList.length; i++) {
+            var category = catList[i];
             if (this.collectionCache.includes(category.handle))
                 return;
             if (this.collectionImageCache.includes(category.image.src))
@@ -83,7 +84,7 @@ class MotorState {
                 this.collectionImageCache.push(category.image.src);
             }
             this.allCollections.set(category.handle, category);
-        });
+        }
     }
     async loadCategories() {
         return new Promise(async (resolve, reject) => {
