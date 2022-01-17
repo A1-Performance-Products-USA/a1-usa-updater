@@ -22,8 +22,8 @@ class ChangeList {
     constructor(dir, createName, updateName) {
         this.productCreates = [];
         this.productUpdates = [];
-        this.createCount = 1;
-        this.updateCount = 1;
+        this.createCount = 0;
+        this.updateCount = 0;
         this.createName = createName;
         this.updateName = updateName;
         this.dir = dir;
@@ -107,6 +107,7 @@ class ChangeList {
             if (this.productCreates.length <= 0)
                 return resolve(0);
             try {
+                this.createCount = 1;
                 let counter = 0;
                 this.productCreates.forEach((v, i) => {
                     counter++;
@@ -132,6 +133,7 @@ class ChangeList {
             if (this.productUpdates.length <= 0)
                 return resolve(0);
             try {
+                this.updateCount = 1;
                 let counter = 0;
                 this.productUpdates.forEach((v, i) => {
                     counter++;
@@ -155,6 +157,7 @@ class ChangeList {
             if (this.collectionCreates.length <= 0)
                 return resolve(0);
             try {
+                this.createCount = 1;
                 let counter = 0;
                 this.collectionCreates.forEach((v, i) => {
                     counter++;
@@ -181,6 +184,7 @@ class ChangeList {
             if (this.collectionUpdates.length <= 0)
                 return resolve(0);
             try {
+                this.updateCount = 1;
                 let counter = 0;
                 this.collectionUpdates.forEach((v, i) => {
                     counter++;
