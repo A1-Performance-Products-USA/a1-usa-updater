@@ -73,13 +73,16 @@ class MotorState {
         this.collectionImageCache = this.collectionImageCache || new Array();
         for (let i = 0; i < catList.length; i++) {
             var category = catList[i];
+            console.log('Adding Category: ' + category.handle);
             if (category.title == null || category.title == "")
                 return;
             if (this.collectionCache.includes(category.handle))
                 return;
             if (this.collectionImageCache.includes(category.image.src))
                 return;
+            console.log('Category passed the checks!');
             if (category.image.src != "") {
+                console.log('Category added to the cache');
                 this.collectionCache.push(category.handle);
                 this.collectionImageCache.push(category.image.src);
             }
