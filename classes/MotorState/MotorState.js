@@ -23,6 +23,9 @@ class MotorState {
         this.loadProp65();
         this.addProduct = this.addProduct || this.addProduct.bind(this);
         this.addProp65 = this.addProp65 || this.addProp65.bind(this);
+        this.allCollections = this.allCollections || new Map();
+        this.collectionCache = this.collectionCache || new Array();
+        this.collectionImageCache = this.collectionImageCache || new Array();
     }
     addProduct = (product) => {
         if (this.exclusionList.find((ex) => ex === product.getHandle()))
@@ -68,9 +71,6 @@ class MotorState {
         return this.collectionCache.includes(handle);
     }
     addCategory(catList) {
-        this.allCollections = this.allCollections || new Map();
-        this.collectionCache = this.collectionCache || new Array();
-        this.collectionImageCache = this.collectionImageCache || new Array();
         for (let i = 0; i < catList.length; i++) {
             let category = catList[i];
             if (this.collectionImageCache.includes(category.image.src))
