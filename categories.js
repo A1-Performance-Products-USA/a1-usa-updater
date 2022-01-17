@@ -36,12 +36,12 @@ perfObserver.observe({ entryTypes: ["measure"] });
     const shopify = new ShopifyHandler_1.default(process.env.SHOPIFY_SHOP, process.env.SHOPIFY_API, process.env.SHOPIFY_WEBHOOK_URL, process.env.SERVER_PORT, DOWNLOAD_DIR, "sh_categories.jsonl");
     try {
         perf_hooks_1.performance.mark("MS_LOAD_TIME_START");
-        console.log("Loading MotorState Products...");
+        console.log("Loading MotorState Categories...");
         await motorstate.loadCategories();
         perf_hooks_1.performance.mark("MS_LOAD_TIME_END");
         perf_hooks_1.performance.measure("MS_LOAD_TIME", "MS_LOAD_TIME_START", "MS_LOAD_TIME_END");
         perf_hooks_1.performance.mark("SH_LOAD_TIME_START");
-        console.log("Loading Shopify Products...");
+        console.log("Loading Shopify Categories...");
         await shopify.getCollections([
             "all-products",
             "best-sellers",
