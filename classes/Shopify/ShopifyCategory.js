@@ -1,4 +1,6 @@
-export default class ShopifyCategory {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class ShopifyCategory {
     id;
     title;
     handle;
@@ -19,3 +21,4 @@ export default class ShopifyCategory {
         this.seo = info.seo || {};
     }
 }
+exports.default = ShopifyCategory;

@@ -1,10 +1,13 @@
-import { createRequire as _createRequire } from "module";
-const __require = _createRequire(import.meta.url);
-import ShopifyBulkHandler from "@class/Shopify/ShopifyBulkHandler";
-import fs from 'fs';
-import https from 'https';
-const path = __require("path");
-export default class SHFetcher extends ShopifyBulkHandler {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const ShopifyBulkHandler_1 = __importDefault(require("../Shopify/ShopifyBulkHandler"));
+const fs_1 = __importDefault(require("fs"));
+const https_1 = __importDefault(require("https"));
+const path = require("path");
+class SHFetcher extends ShopifyBulkHandler_1.default {
     bulkProductQuery;
     bulkInventoryQuery;
     bulkCollectionQuery;
@@ -200,8 +203,8 @@ export default class SHFetcher extends ShopifyBulkHandler {
     //Download all files.
     async finishBulk(req, res, resolve, reject) {
         try {
-            let fileWrite = fs.createWriteStream(path.join(this.saveLocation, this.saveFileName));
-            let stream = https.get(await this.getDownloadURL(), {
+            let fileWrite = fs_1.default.createWriteStream(path.join(this.saveLocation, this.saveFileName));
+            let stream = https_1.default.get(await this.getDownloadURL(), {
                 headers: {
                     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
                     'Accept-Encoding': 'gzip, deflate, br',
@@ -228,7 +231,7 @@ export default class SHFetcher extends ShopifyBulkHandler {
     async fetchInformation() {
         return new Promise(async (resolve, reject) => {
             try {
-                if (fs.existsSync(path.join(this.saveLocation, this.saveFileName))) {
+                if (fs_1.default.existsSync(path.join(this.saveLocation, this.saveFileName))) {
                     return resolve(null);
                 }
                 //Start Bulk Query
@@ -245,7 +248,7 @@ export default class SHFetcher extends ShopifyBulkHandler {
     async fetchInventory() {
         return new Promise(async (resolve, reject) => {
             try {
-                if (fs.existsSync(path.join(this.saveLocation, this.saveFileName))) {
+                if (fs_1.default.existsSync(path.join(this.saveLocation, this.saveFileName))) {
                     return resolve(null);
                 }
                 this.startBulk(this.bulkInventoryQuery);
@@ -260,7 +263,7 @@ export default class SHFetcher extends ShopifyBulkHandler {
     async fetchCollections() {
         return new Promise(async (resolve, reject) => {
             try {
-                if (fs.existsSync(path.join(this.saveLocation, this.saveFileName))) {
+                if (fs_1.default.existsSync(path.join(this.saveLocation, this.saveFileName))) {
                     return resolve(null);
                 }
                 this.startBulk(this.bulkCollectionQuery);
@@ -273,3 +276,4 @@ export default class SHFetcher extends ShopifyBulkHandler {
         });
     }
 }
+exports.default = SHFetcher;

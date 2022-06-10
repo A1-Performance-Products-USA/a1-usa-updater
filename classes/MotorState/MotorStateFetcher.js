@@ -1,10 +1,11 @@
-import { createRequire as _createRequire } from "module";
-const __require = _createRequire(import.meta.url);
-const fs = __require("fs");
-const Client = __require("ftp");
-const path = __require("path");
-import { FileFetcher } from './FileFetcher';
-export class MSFetcher extends FileFetcher {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MSFetcher = void 0;
+const fs = require("fs");
+const Client = require("ftp");
+const path = require("path");
+const FileFetcher_1 = require("./FileFetcher");
+class MSFetcher extends FileFetcher_1.FileFetcher {
     constructor(fetchLocation, fetchFileName, saveLocation, saveFileName) {
         super(fetchLocation, fetchFileName, saveLocation, saveFileName);
         try {
@@ -56,3 +57,4 @@ export class MSFetcher extends FileFetcher {
         });
     }
 }
+exports.MSFetcher = MSFetcher;

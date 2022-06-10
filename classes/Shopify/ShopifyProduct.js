@@ -1,4 +1,6 @@
-export default class ShopifyProduct {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class ShopifyProduct {
     id;
     handle;
     title;
@@ -41,3 +43,4 @@ export default class ShopifyProduct {
         return this.handle;
     }
 }
+exports.default = ShopifyProduct;

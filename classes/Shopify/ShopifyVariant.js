@@ -1,4 +1,6 @@
-export default class ShopifyVariant {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class ShopifyVariant {
     id;
     barcode;
     inventoryPolicy;
@@ -27,3 +29,4 @@ export default class ShopifyVariant {
         this.locationId = id;
     }
 }
+exports.default = ShopifyVariant;

@@ -1,7 +1,7 @@
-import { createRequire as _createRequire } from "module";
-const __require = _createRequire(import.meta.url);
-const express = __require("express");
-export default class ShopifyWebHookHandler {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express = require("express");
+class ShopifyWebHookHandler {
     requester;
     app = express();
     subscription;
@@ -94,3 +94,4 @@ export default class ShopifyWebHookHandler {
         });
     }
 }
+exports.default = ShopifyWebHookHandler;

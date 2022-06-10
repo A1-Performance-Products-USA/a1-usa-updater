@@ -1,12 +1,15 @@
-import { createRequire as _createRequire } from "module";
-const __require = _createRequire(import.meta.url);
-const fs = __require("fs");
-const csv = __require("csv-parser");
-import MotorStateProduct from '@class/MotorState/MotorStateProduct';
-import ShopifyProduct from "@class/Shopify/ShopifyProduct";
-import ShopifyVariant from "@class/Shopify/ShopifyVariant";
-import ShopifyCategory from "@class/Shopify/ShopifyCategory";
-export default class MSLoader {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const fs = require("fs");
+const csv = require("csv-parser");
+const MotorStateProduct_1 = __importDefault(require("../MotorState/MotorStateProduct"));
+const ShopifyProduct_1 = __importDefault(require("../Shopify/ShopifyProduct"));
+const ShopifyVariant_1 = __importDefault(require("../Shopify/ShopifyVariant"));
+const ShopifyCategory_1 = __importDefault(require("../Shopify/ShopifyCategory"));
+class MSLoader {
     saveLocation;
     saveFileName;
     constructor(saveLocation, saveFileName) {
@@ -51,7 +54,7 @@ export default class MSLoader {
                 .on('data', async (data) => {
                 if (data.long_description.toLowerCase().includes('sanitizer'))
                     return;
-                fn(await this.translateToShopify(new MotorStateProduct(data)));
+                fn(await this.translateToShopify(new MotorStateProduct_1.default(data)));
             })
                 .on('end', () => {
                 resolve();
@@ -93,7 +96,7 @@ export default class MSLoader {
                 skipLines: 1
             }))
                 .on('data', async (data) => {
-                fn(await this.translateToShopifyInventory(new MotorStateProduct(data)));
+                fn(await this.translateToShopifyInventory(new MotorStateProduct_1.default(data)));
             })
                 .on('end', () => {
                 resolve();
@@ -142,7 +145,7 @@ export default class MSLoader {
                 if (cacheCheck(data.category_1.toLowerCase().replace(/[^a-z0-9]+/g, '-') + "_" + data.category_2.toLowerCase().replace(/[^a-z0-9]+/g, '-') + "_" + data.category_3.toLowerCase().replace(/[^a-z0-9]+/g, '-')))
                     return;
                 //console.log('Adding categories for ' + data.part_number);
-                fn(await this.translateToShopifyCategory(new MotorStateProduct(data)));
+                fn(await this.translateToShopifyCategory(new MotorStateProduct_1.default(data)));
             })
                 .on('end', () => {
                 resolve();
@@ -202,9 +205,9 @@ export default class MSLoader {
     }
     async translateToShopifyInventory(product) {
         return new Promise((resolve, reject) => {
-            resolve(new ShopifyProduct({
+            resolve(new ShopifyProduct_1.default({
                 handle: product.handle,
-                variants: new ShopifyVariant({
+                variants: new ShopifyVariant_1.default({
                     inventoryQuantity: parseInt(product.quantity)
                 })
             }));
@@ -213,7 +216,7 @@ export default class MSLoader {
     async translateToShopifyCategory(product) {
         return new Promise((resolve, reject) => {
             resolve([
-                new ShopifyCategory({
+                new ShopifyCategory_1.default({
                     title: product.category_1,
                     handle: product.category_1.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
                     sortOrder: "BEST_SELLING",
@@ -236,7 +239,7 @@ export default class MSLoader {
                         altText: product.category_1
                     }
                 }),
-                new ShopifyCategory({
+                new ShopifyCategory_1.default({
                     title: product.category_2,
                     handle: product.category_1.toLowerCase().replace(/[^a-z0-9]+/g, '-') + "_" + product.category_2.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
                     sortOrder: "BEST_SELLING",
@@ -264,7 +267,7 @@ export default class MSLoader {
                         altText: product.category_2
                     }
                 }),
-                new ShopifyCategory({
+                new ShopifyCategory_1.default({
                     title: product.category_3,
                     handle: product.category_1.toLowerCase().replace(/[^a-z0-9]+/g, '-') + "_" + product.category_2.toLowerCase().replace(/[^a-z0-9]+/g, '-') + "_" + product.category_3.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
                     sortOrder: "BEST_SELLING",
@@ -302,7 +305,7 @@ export default class MSLoader {
     }
     async translateToShopify(product) {
         return new Promise((resolve, reject) => {
-            resolve(new ShopifyProduct({
+            resolve(new ShopifyProduct_1.default({
                 handle: product.handle,
                 title: `${product.long_description || ""}`.substring(0, 255),
                 descriptionHtml: `<p>${product.long_description || ""}</p><p>${product.ms_notes.replace(/\\/g, '-') || ""}</p>`,
@@ -335,7 +338,7 @@ export default class MSLoader {
                     title: `${product.part_number} - ${product.description}`,
                     description: `${product.long_description}`
                 },
-                variants: new ShopifyVariant({
+                variants: new ShopifyVariant_1.default({
                     barcode: product.upc || "",
                     inventoryPolicy: "DENY",
                     price: product.price,
@@ -354,3 +357,4 @@ export default class MSLoader {
         });
     }
 }
+exports.default = MSLoader;

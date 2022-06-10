@@ -1,10 +1,15 @@
-import ShopifyBulkHandler from "./ShopifyBulkHandler";
-import path from "path";
-import fs from "fs";
-import FormData from "form-data";
-import fetch from 'node-fetch';
-import https from 'https';
-export default class SHMutator extends ShopifyBulkHandler {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const ShopifyBulkHandler_1 = __importDefault(require("./ShopifyBulkHandler"));
+const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
+const form_data_1 = __importDefault(require("form-data"));
+const node_fetch_1 = __importDefault(require("node-fetch"));
+const https_1 = __importDefault(require("https"));
+class SHMutator extends ShopifyBulkHandler_1.default {
     createFileName;
     updateFileName;
     basePath;
@@ -47,19 +52,19 @@ export default class SHMutator extends ShopifyBulkHandler {
                 (this.focus == "CREATE"
                     ? this.createCount
                     : this.updateCount) + '.jsonl';
-            var form = new FormData();
+            var form = new form_data_1.default();
             for (let i = 0; i < this.uploadInfo.parameters.length; i++) {
                 if (this.uploadInfo.parameters[i]["name"] == "key") {
                     this.uploadInfo.key = this.uploadInfo.parameters[i]["value"];
                 }
                 form.append(this.uploadInfo.parameters[i]["name"], this.uploadInfo.parameters[i]["value"]);
             }
-            form.append("file", fs.createReadStream(path.join(this.basePath, fileName)), { filename: fileName, contentType: 'text/jsonl' });
+            form.append("file", fs_1.default.createReadStream(path_1.default.join(this.basePath, fileName)), { filename: fileName, contentType: 'text/jsonl' });
             try {
                 form.getLength(async (err, length) => {
                     if (err)
                         return reject(err);
-                    const res = await fetch(this.uploadInfo.url, {
+                    const res = await (0, node_fetch_1.default)(this.uploadInfo.url, {
                         method: "POST",
                         body: form,
                         headers: {
@@ -235,8 +240,8 @@ export default class SHMutator extends ShopifyBulkHandler {
             try {
                 console.log("Downloading the results of mutation ID: " + this.mutationId);
                 const date = new Date();
-                let fileWrite = fs.createWriteStream(path.join(this.saveLocation, `${(this.focus == "CREATE" ? this.createFileName : this.updateFileName) + "_" + (this.focus == "CREATE" ? this.createCount : this.updateCount) + '_results.jsonl'}`));
-                let stream = https.get(downloadURL || await this.getResultsURL(), {
+                let fileWrite = fs_1.default.createWriteStream(path_1.default.join(this.saveLocation, `${(this.focus == "CREATE" ? this.createFileName : this.updateFileName) + "_" + (this.focus == "CREATE" ? this.createCount : this.updateCount) + '_results.jsonl'}`));
+                let stream = https_1.default.get(downloadURL || await this.getResultsURL(), {
                     headers: {
                         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
                         'Accept-Encoding': 'gzip, deflate, br',
@@ -401,3 +406,4 @@ export default class SHMutator extends ShopifyBulkHandler {
         });
     }
 }
+exports.default = SHMutator;
