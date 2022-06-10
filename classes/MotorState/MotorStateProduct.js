@@ -53,7 +53,7 @@ class MotorStateProduct {
         this.shipalone = info.shipalone;
         this.status = info.status;
         this.ms_notes = info.ms_notes;
-        this.image_url = info.image_url;
+        this.image_url = (!info.image_url || info.image_url.length <= 0) ? process.env.SHOPIFY_MISSING_IMAGE_URL : info.image_url;
         this.category_1 = info.category_1;
         this.category_2 = info.category_2;
         this.category_3 = info.category_3;
