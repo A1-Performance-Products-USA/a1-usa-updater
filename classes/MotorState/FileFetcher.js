@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.FileFetcher = void 0;
-class FileFetcher {
+export class FileFetcher {
     fetchLocation;
     fetchFileName;
     saveLocation;
@@ -14,4 +11,3 @@ class FileFetcher {
         this.saveFileName = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}_${saveFileName}`;
     }
 }
-exports.FileFetcher = FileFetcher;

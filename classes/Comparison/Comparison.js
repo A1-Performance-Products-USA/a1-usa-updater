@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class Comparison {
+export default class Comparison {
     ms_products;
     sh_products;
     ms_collections;
@@ -392,4 +390,3 @@ class Comparison {
         });
     }
 }
-exports.default = Comparison;

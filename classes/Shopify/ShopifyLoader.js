@@ -1,14 +1,9 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const readline_1 = __importDefault(require("readline"));
-const fs_1 = __importDefault(require("fs"));
-const ShopifyProduct_1 = __importDefault(require("./ShopifyProduct"));
-const ShopifyVariant_1 = __importDefault(require("./ShopifyVariant"));
-const ShopifyCategory_1 = __importDefault(require("./ShopifyCategory"));
-class SHLoader {
+import readline from 'readline';
+import fs from 'fs';
+import ShopifyProduct from './ShopifyProduct';
+import ShopifyVariant from './ShopifyVariant';
+import ShopifyCategory from './ShopifyCategory';
+export default class SHLoader {
     saveLocation;
     saveFileName;
     constructor(saveLocation, saveFileName) {
@@ -19,18 +14,18 @@ class SHLoader {
     async readProducts() {
         return new Promise(async (resolve, reject) => {
             try {
-                const rl = readline_1.default.createInterface({
-                    input: fs_1.default.createReadStream(this.saveLocation + '/' + this.saveFileName)
+                const rl = readline.createInterface({
+                    input: fs.createReadStream(this.saveLocation + '/' + this.saveFileName)
                 });
                 let products = [];
                 let variants = [];
                 rl.on('line', (line) => {
                     let lineObject = JSON.parse(line);
                     if (lineObject.id.includes("/Product/")) {
-                        products[lineObject.id] = new ShopifyProduct_1.default(lineObject);
+                        products[lineObject.id] = new ShopifyProduct(lineObject);
                     }
                     else if (lineObject.id.includes("/ProductVariant/")) {
-                        variants[lineObject.id] = new ShopifyVariant_1.default(lineObject);
+                        variants[lineObject.id] = new ShopifyVariant(lineObject);
                     }
                     else if (lineObject.id.includes("/InventoryLevel/")) {
                         variants[lineObject["__parentId"]].setInventoryLocation(lineObject.location.id);
@@ -105,15 +100,15 @@ class SHLoader {
     async loadCollections(exclusionList) {
         return new Promise(async (resolve, reject) => {
             try {
-                const rl = readline_1.default.createInterface({
-                    input: fs_1.default.createReadStream(this.saveLocation + '/' + this.saveFileName)
+                const rl = readline.createInterface({
+                    input: fs.createReadStream(this.saveLocation + '/' + this.saveFileName)
                 });
                 let collections = new Map();
                 rl.on('line', (line) => {
                     let lineObject = JSON.parse(line);
                     if (exclusionList.includes(lineObject.handle))
                         return;
-                    collections.set(lineObject.handle, new ShopifyCategory_1.default(lineObject));
+                    collections.set(lineObject.handle, new ShopifyCategory(lineObject));
                 });
                 rl.on('close', async () => {
                     resolve(collections);
@@ -128,4 +123,3 @@ class SHLoader {
         });
     }
 }
-exports.default = SHLoader;

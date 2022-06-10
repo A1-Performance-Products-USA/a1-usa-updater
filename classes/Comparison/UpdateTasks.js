@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateProduct = void 0;
-class UpdateProduct {
+export class UpdateProduct {
     id;
     handle;
     descriptionHtml;
@@ -31,4 +28,3 @@ class UpdateProduct {
     toJSON() {
     }
 }
-exports.UpdateProduct = UpdateProduct;

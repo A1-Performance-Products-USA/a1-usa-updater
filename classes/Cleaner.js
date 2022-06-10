@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require('fs');
 const path = require('path');
 class Cleaner {
@@ -62,4 +60,4 @@ class Cleaner {
         console.log("Cleaned up application cache and logs.");
     }
 }
-exports.default = Cleaner;
+export default Cleaner;

@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const PORT = 8080;
-class ShopifyBulkHandler {
+export default class ShopifyBulkHandler {
     saveLocation;
     saveFileName;
     kind;
@@ -42,4 +40,3 @@ class ShopifyBulkHandler {
         });
     }
 }
-exports.default = ShopifyBulkHandler;

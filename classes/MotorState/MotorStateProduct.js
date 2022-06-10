@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class MotorStateProduct {
+export default class MotorStateProduct {
     title;
     part_number;
     description;
@@ -68,4 +66,3 @@ class MotorStateProduct {
         return this.handle;
     }
 }
-exports.default = MotorStateProduct;

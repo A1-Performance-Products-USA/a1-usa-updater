@@ -1,11 +1,6 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const MotorStateFetcher_1 = require("./MotorStateFetcher");
-const MotorStateLoader_1 = __importDefault(require("./MotorStateLoader"));
-class MotorState {
+import { MSFetcher } from './MotorStateFetcher';
+import MSLoader from './MotorStateLoader';
+export default class MotorState {
     productList;
     exclusionList;
     prop65;
@@ -15,8 +10,8 @@ class MotorState {
     collectionCache;
     collectionImageCache;
     constructor(fetchLocation, fetchFileName, saveLocation, saveFileName, exclusionList) {
-        this.fetcher = new MotorStateFetcher_1.MSFetcher(fetchLocation, fetchFileName, saveLocation, saveFileName);
-        this.loader = new MotorStateLoader_1.default(saveLocation, this.fetcher.saveFileName);
+        this.fetcher = new MSFetcher(fetchLocation, fetchFileName, saveLocation, saveFileName);
+        this.loader = new MSLoader(saveLocation, this.fetcher.saveFileName);
         this.productList = new Map();
         this.exclusionList = exclusionList || Array();
         this.prop65 = new Map();
@@ -95,4 +90,3 @@ class MotorState {
         });
     }
 }
-exports.default = MotorState;

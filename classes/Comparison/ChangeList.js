@@ -1,11 +1,6 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const path_1 = __importDefault(require("path"));
-const fs_1 = __importDefault(require("fs"));
-class ChangeList {
+import path from "path";
+import fs from "fs";
+export default class ChangeList {
     productUpdates;
     productCreates;
     collectionUpdates;
@@ -30,8 +25,8 @@ class ChangeList {
         const d = new Date();
         this.createFileName = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}_${createName}`;
         this.updateFileName = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}_${updateName}`;
-        this.createPath = path_1.default.join(dir, this.createFileName);
-        this.updatePath = path_1.default.join(dir, this.updateFileName);
+        this.createPath = path.join(dir, this.createFileName);
+        this.updatePath = path.join(dir, this.updateFileName);
     }
     createProduct(product) {
         let task = {
@@ -117,10 +112,10 @@ class ChangeList {
                     if (i >= 999) {
                         return resolve(this.createCount);
                     }
-                    fs_1.default.appendFileSync(this.createPath + "_" + this.createCount + '.jsonl', JSON.stringify(v) + "\r\n");
+                    fs.appendFileSync(this.createPath + "_" + this.createCount + '.jsonl', JSON.stringify(v) + "\r\n");
                     if (counter == this.productCreates.length)
                         return resolve(this.createCount);
-                    let stat = fs_1.default.statSync(this.createPath + "_" + this.createCount + '.jsonl');
+                    let stat = fs.statSync(this.createPath + "_" + this.createCount + '.jsonl');
                     if (stat.size >= 19000000) {
                         this.createCount++;
                     }
@@ -140,10 +135,10 @@ class ChangeList {
                 let counter = 0;
                 this.productUpdates.forEach((v, i) => {
                     counter++;
-                    fs_1.default.appendFileSync(this.updatePath + "_" + this.updateCount + '.jsonl', JSON.stringify(v) + "\r\n");
+                    fs.appendFileSync(this.updatePath + "_" + this.updateCount + '.jsonl', JSON.stringify(v) + "\r\n");
                     if (counter == this.productUpdates.length)
                         return resolve(this.updateCount);
-                    let stat = fs_1.default.statSync(this.updatePath + "_" + this.updateCount + '.jsonl');
+                    let stat = fs.statSync(this.updatePath + "_" + this.updateCount + '.jsonl');
                     if (stat.size >= 19000000) {
                         this.updateCount++;
                     }
@@ -167,10 +162,10 @@ class ChangeList {
                     if (i >= 999) {
                         return resolve(this.createCount);
                     }
-                    fs_1.default.appendFileSync(this.createPath + "_" + this.createCount + '.jsonl', JSON.stringify(v) + "\r\n");
+                    fs.appendFileSync(this.createPath + "_" + this.createCount + '.jsonl', JSON.stringify(v) + "\r\n");
                     if (counter == this.collectionCreates.length)
                         return resolve(this.createCount);
-                    let stat = fs_1.default.statSync(this.createPath + "_" + this.createCount + '.jsonl');
+                    let stat = fs.statSync(this.createPath + "_" + this.createCount + '.jsonl');
                     if (stat.size >= 19000000) {
                         this.createCount++;
                     }
@@ -191,10 +186,10 @@ class ChangeList {
                 let counter = 0;
                 this.collectionUpdates.forEach((v, i) => {
                     counter++;
-                    fs_1.default.appendFileSync(this.updatePath + "_" + this.updateCount + '.jsonl', JSON.stringify(v) + "\r\n");
+                    fs.appendFileSync(this.updatePath + "_" + this.updateCount + '.jsonl', JSON.stringify(v) + "\r\n");
                     if (counter == this.collectionUpdates.length)
                         return resolve(this.updateCount);
-                    let stat = fs_1.default.statSync(this.updatePath + "_" + this.updateCount + '.jsonl');
+                    let stat = fs.statSync(this.updatePath + "_" + this.updateCount + '.jsonl');
                     if (stat.size >= 19000000) {
                         this.updateCount++;
                     }
@@ -236,4 +231,3 @@ class ChangeList {
         });
     }
 }
-exports.default = ChangeList;
